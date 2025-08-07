@@ -1,3 +1,4 @@
+from django.core.serializers import serialize
 from django.forms import model_to_dict
 from django.shortcuts import render
 from rest_framework import generics
@@ -15,16 +16,19 @@ from .serializers import PlantsSerializer
 
 class PlantsAPIView(APIView):
     def get(self, request):
-        lst = Plants.objects.all().values()
-        return Response({'posts': list(lst)})
+        lst = Plants.objects.all()
+        return Response({'posts': PlantsSerializer(lst, many=True).data})
 
     def post(self, request):
+        serializer = PlantsSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
         post_new = Plants.objects.create(
             title=request.data['title'],
             description=request.data['description'],
             category_id=request.data['category_id']
         )
 
-        return Response({'post': model_to_dict(post_new)})
+        return Response({'post': PlantsSerializer(post_new).data})
 
 

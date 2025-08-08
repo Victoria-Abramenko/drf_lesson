@@ -21,5 +21,7 @@ from plants.views import PlantsAPIView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('/api/v1/plantslist/', PlantsAPIView.as_view())
+    path('/api/v1/plantslist/', PlantsAPIView.as_view()),
+    path('/api/v1/plantslist/<int:pk>/', PlantsAPIView.as_view()),
+
 ]

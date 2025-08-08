@@ -22,13 +22,26 @@ class PlantsAPIView(APIView):
     def post(self, request):
         serializer = PlantsSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        serializer.save()
 
-        post_new = Plants.objects.create(
-            title=request.data['title'],
-            description=request.data['description'],
-            category_id=request.data['category_id']
-        )
+        return Response({'post': serializer.data})
 
-        return Response({'post': PlantsSerializer(post_new).data})
+    def put(self, request, *args, **kwargs):
+        pk = kwargs.get("pk", None)
+        if not pk:
+            return Response({"error": "Метод put не определен"})
+
+        try:
+            instance = Plants.objects.get(pk=pk)
+        except:
+            return Response({"error": "Такой объект не найден"})
+
+        serializer = PlantsSerializer(data=request.data, instance=instance)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"post": serializer.data})
+
+
+
 
 

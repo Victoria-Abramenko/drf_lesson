@@ -4,6 +4,7 @@ from email.policy import default
 from rest_framework import serializers
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
+from rest_framework.response import Response
 
 from .models import Plants
 
@@ -21,6 +22,26 @@ class PlantsSerializer(serializers.Serializer):
     time_update= serializers.DateTimeField(read_only=True)
     is_published = serializers.BooleanField(default=True)
     category_id = serializers.IntegerField()
+
+    def create(self, validated_data):
+        return Plants.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        instance.title = validated_data.get("title", instance.title)
+        instance.description = validated_data.get("description", instance.description)
+        instance.time_update = validated_data.get("time_update", instance.time_update)
+        instance.is_published = validated_data.get("is_published", instance.is_published)
+        instance.category_id = validated_data.get("category_id", instance.category_id)
+        instance.save()
+        return instance
+
+    # def delete(self, request, *args, **kwargs):
+    #     pk = kwargs.get("pk", None)
+    #     if not pk:
+    #         return Response({"error": "Удаление не может быть выполнено"})
+    #
+    #     return Response({"post": "delete post " + str(pk)})
+
 
 
 

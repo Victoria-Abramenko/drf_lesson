@@ -13,6 +13,10 @@ from .serializers import PlantsSerializer
 #     queryset = Plants.objects.all()
 #     serializer_class = PlantsSerializer
 
+class PlantsApiList(generics.ListCreateAPIView):
+    queryset = Plants.objects.all()
+    serializer_class = PlantsSerializer
+
 
 class PlantsAPIView(APIView):
     def get(self, request):

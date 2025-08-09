@@ -15,25 +15,11 @@ from .models import Plants
 #         self.description = description
 
 
-class PlantsSerializer(serializers.Serializer):
-    title = serializers.CharField(max_length=255)
-    description = serializers.CharField()
-    time_create = serializers.DateTimeField(read_only=True)
-    time_update= serializers.DateTimeField(read_only=True)
-    is_published = serializers.BooleanField(default=True)
-    category_id = serializers.IntegerField()
-
-    def create(self, validated_data):
-        return Plants.objects.create(**validated_data)
-
-    def update(self, instance, validated_data):
-        instance.title = validated_data.get("title", instance.title)
-        instance.description = validated_data.get("description", instance.description)
-        instance.time_update = validated_data.get("time_update", instance.time_update)
-        instance.is_published = validated_data.get("is_published", instance.is_published)
-        instance.category_id = validated_data.get("category_id", instance.category_id)
-        instance.save()
-        return instance
+class PlantsSerializer(serializers.ModelSerializer):
+   class Meta:
+       model = Plants
+       fields = "__all__"
+       # fields = ("title", "description", "category")
 
     # def delete(self, request, *args, **kwargs):
     #     pk = kwargs.get("pk", None)

@@ -18,34 +18,44 @@ class PlantsApiList(generics.ListCreateAPIView):
     serializer_class = PlantsSerializer
 
 
-class PlantsAPIView(APIView):
-    def get(self, request):
-        lst = Plants.objects.all()
-        return Response({'posts': PlantsSerializer(lst, many=True).data})
-
-    def post(self, request):
-        serializer = PlantsSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
-        return Response({'post': serializer.data})
-
-    def put(self, request, *args, **kwargs):
-        pk = kwargs.get("pk", None)
-        if not pk:
-            return Response({"error": "Метод put не определен"})
-
-        try:
-            instance = Plants.objects.get(pk=pk)
-        except:
-            return Response({"error": "Такой объект не найден"})
-
-        serializer = PlantsSerializer(data=request.data, instance=instance)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response({"post": serializer.data})
+class PlantsApiUpdate(generics.UpdateAPIView):
+    queryset = Plants.objects.all()
+    serializer_class = PlantsSerializer
 
 
+class PlantsApiDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Plants.objects.all()
+    serializer_class = PlantsSerializer
+
+
+# class PlantsAPIView(APIView):
+#     def get(self, request):
+#         lst = Plants.objects.all()
+#         return Response({'posts': PlantsSerializer(lst, many=True).data})
+#
+#     def post(self, request):
+#         serializer = PlantsSerializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#
+#         return Response({'post': serializer.data})
+#
+#     def put(self, request, *args, **kwargs):
+#         pk = kwargs.get("pk", None)
+#         if not pk:
+#             return Response({"error": "Метод put не определен"})
+#
+#         try:
+#             instance = Plants.objects.get(pk=pk)
+#         except:
+#             return Response({"error": "Такой объект не найден"})
+#
+#         serializer = PlantsSerializer(data=request.data, instance=instance)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#         return Response({"post": serializer.data})
+#
+#
 
 
 

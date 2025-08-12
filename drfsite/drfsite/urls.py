@@ -22,8 +22,28 @@ from rest_framework import routers
 
 # from plants.views import PlantsApiList, PlantsApiUpdate, PlantsApiDetailView
 
-router = routers.SimpleRouter()
-router.register(r'plants', PlantsViewSet)
+class MyCustomRouter(routers.SimpleRouter):
+    routes = [
+        routers.Route(
+            url=r'^{prefix}$',
+            mapping={'get': 'list'},
+            name='{basename}-list',
+            detail=False,
+            initkwargs={'suffix': 'List'}
+        ),
+        routers.Route(
+            url=r'^{prefix}/{lookup}$',
+            mapping={'get': 'retrieve'},
+            name='{basename}-detail',
+            detail=False,
+            initkwargs={'suffix': 'Detail'}
+        )
+    ]
+
+
+# router = routers.SimpleRouter()
+router = MyCustomRouter()
+router.register(r'plants', PlantsViewSet, basename='plants')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

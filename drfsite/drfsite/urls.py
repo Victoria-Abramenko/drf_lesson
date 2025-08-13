@@ -17,39 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from plants.views import PlantsViewSet
-from rest_framework import routers
+from plants.views import PlantsAPIList, PlantsAPIUpdate, PlantsAPIDestroy
 
-# from plants.views import PlantsApiList, PlantsApiUpdate, PlantsApiDetailView
-
-class MyCustomRouter(routers.SimpleRouter):
-    routes = [
-        routers.Route(
-            url=r'^{prefix}$',
-            mapping={'get': 'list'},
-            name='{basename}-list',
-            detail=False,
-            initkwargs={'suffix': 'List'}
-        ),
-        routers.Route(
-            url=r'^{prefix}/{lookup}$',
-            mapping={'get': 'retrieve'},
-            name='{basename}-detail',
-            detail=False,
-            initkwargs={'suffix': 'Detail'}
-        )
-    ]
-
-
-# router = routers.SimpleRouter()
-router = MyCustomRouter()
-router.register(r'plants', PlantsViewSet, basename='plants')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/', include(router.urls))
-    # path('api/v1/plantslist/', PlantsViewSet.as_view({'get': 'list'})),
-    # path('api/v1/plantslist/<int:pk>/', PlantsViewSet.as_view({'put': 'update'})),
-
-
+    path('api/v1/plants/', PlantsAPIList.as_view()),
+    path('api/v1/plants/<int:pk>/', PlantsAPIUpdate.as_view()),
+    path('api/v1/plantsdelete/<int:pk>/', PlantsAPIDestroy.as_view()),
 ]

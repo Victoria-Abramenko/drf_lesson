@@ -22,6 +22,7 @@ from plants.views import PlantsAPIList, PlantsAPIUpdate, PlantsAPIDestroy
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/v1/drf-auth/', include('rest_framework.urls')),
     path('api/v1/plants/', PlantsAPIList.as_view()),
     path('api/v1/plants/<int:pk>/', PlantsAPIUpdate.as_view()),
     path('api/v1/plantsdelete/<int:pk>/', PlantsAPIDestroy.as_view()),
